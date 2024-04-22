@@ -57,3 +57,40 @@ SELECT Site_name, MAX(Area) FROM Site
     GROUP BY Site_name
     ORDER BY MAX(-Area)
     LIMIT 1;
+
+-- Nested query
+SELECT Site_name, Area FROM Site WHERE Area = (SELECT MAX(Area) FROM Site);
+
+
+-- PROBLEM 3
+-- Your mission is to list the scientific names of bird species in 
+-- descending order of their maximum average egg volumes. That is, 
+-- compute the average volume of the eggs in each nest, and then for 
+-- the nests of each species compute the maximum of those average volumes, 
+-- and list by species in descending order of maximum volume.
+
+.tables
+SELECT * FROM Bird_nests;
+--DROP TABLE Averages;
+
+-- create table calculating the average egg volumes
+CREATE TEMP TABLE Averages AS
+SELECT Nest_ID, AVG(3.14*(Width^2)*Length) AS Avg_volume
+    FROM Bird_eggs
+    GROUP BY Nest_ID;
+
+SELECT * FROM Species;
+
+SELECT Species, MAX(Avg_volume) FROM Bird_nests AS b
+    JOIN Averages USING (Nest_ID) JOIN (
+    SELECT Code, Common_name, Scientific_name FROM Species
+    ) p
+    ON b.Species = p.Code
+    GROUP BY Species, Scientific_name;
+
+
+SELECT s.Common_name AS Species, MAX(a.Avg_volume) AS Max_Avg_Volume
+FROM Bird_nests AS b
+JOIN Averages AS a ON b.Nest_ID = a.Nest_ID
+JOIN Species AS s ON b.Species = s.Code
+GROUP BY s.Common_name, s.Scientific_name;
