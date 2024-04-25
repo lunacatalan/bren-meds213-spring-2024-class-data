@@ -92,7 +92,7 @@ SELECT Site, AVG(Snow_cover) AS Avg_cover FROM Snow_cover
     GROUP BY Site
     ORDER BY -Avg_cover -- or DESC
     LIMIT 3;
-
+  
 
 -- Ask 10: Let's move on to inspecting the nests and answering the following question: Which shorebird species makes the most eggs? Oh and I need a table with the common names, just because :)
 
