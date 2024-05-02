@@ -56,6 +56,6 @@ INSERT INTO Bird_eggs
 SELECT * FROM Bird_eggs WHERE Nest_ID = '14eabaage01';
 
 
--- Week 5 - Create a test harness
+
 
 
