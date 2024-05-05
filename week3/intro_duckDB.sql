@@ -306,3 +306,58 @@ select book_page, nest_id, egg_num, length, width from bird_eggs
 
 select code from species   
     except select distinct species from bird_nests;
+
+
+-- Week 5
+--    can insert data...be explicit!! Much less fragile.
+--    Can udate and delete
+
+SELECT * FROM Species;
+.maxrows 8
+INSERT INTO Species VALUES ('abcd', 'thing', 'name', 'age');
+SELECT * FROM Species;
+
+-- explicity label columns
+INSERT INTO Species (Common_name, Scientific_name, Code, Relevance)
+    VALUES('thing2', 'name', 'efgh', 12);
+
+-- take advantage of default vlaues 
+INSERT INTO Species (Common_name, Code) VALUES ('thing3', 'ikls');
+
+-- Update and Delete
+UPDATE Species SET Relevance = 'not sure yet' WHERE Relevance IS NULL;
+SELECT * FROM Species;
+DELETE FROM Species WHERE Relevance = 'not sure yet';
+SELECT * FROM Species;
+
+-- Safe delete practice #1
+SELECT * FROM Species WHERE Relevance = 'Study species';
+-- after confirming which rows you want to delete, then edit the statement
+DELETE FROM Species WHERE Relevance = 'Study species';
+-- incomplete statement 
+-- leave off "DELETE", then add it after visual confirmation
+
+-- Data Management 
+COPY Species TO 'species_fixed.csv' (HEADER, DELIMITER ',');
+
+-- To go from csv to table in database
+--  1. create empty data table with expectations
+--  2. import csv and pass it to the epty table
+
+-- create tabel
+CREATE TABLE Snow_cover2 (
+    Site VARCHAR NOT NULL,
+    Year INTEGER NOT NULL CHECK (Year BETWEEN 1950 AND 2015),
+    Date DATE NOT NULL,
+    Plot VARCHAR, -- some Null in the data :/
+    Location VARCHAR NOT NULL,
+    Snow_cover INTEGER CHECK (Snow_cover > -1 AND Snow_cover < 101),
+    Observer VARCHAR
+);
+
+.tables
+SELECT * FROM Snow_cover2;
+
+-- import data from csv
+COPY Snow_cover2 FROM '../week4/snow_cover_fixedman_JB.csv' (HEADER, DELIMITER ',');
+SELECT * FROM Snow_cover2;
